@@ -1,0 +1,78 @@
+gym_config:
+    render: False
+    task_dynamics_list: [0, 1, 2, 3]
+    subtask_episode: 3           # the number of episode for each subtask
+    subtask_episode_length: 200  # the length of each episode
+    task_episode: 100            # the number of the task episode
+    seed: 1000                   # seed for all environments
+    dynamics_name: [             # name of all environments
+        'CartPoleSwingUpEnvCm05Pm04Pl05-v0',
+        'CartPoleSwingUpEnvCm05Pm04Pl07-v0',
+        'CartPoleSwingUpEnvCm05Pm08Pl05-v0',
+        'CartPoleSwingUpEnvCm05Pm08Pl07-v0',
+    ]
+
+
+# MPC controller configuration
+mpc_config:
+    optimizer: "Random"             # Random or CEM, # random may need to fix bugs
+    Random: # TODO: warning may contain not finished modification
+        horizon: 15              # how long of the horizon to predict
+        popsize: 40000            # how many random samples for mpc
+        gamma: 0.99              # reward discount coefficient
+        max_iters: 20
+        num_elites: 50
+        epsilon: 0.2
+        alpha: 0.01
+        init_mean: 0
+        init_var: 10
+        particle: 1
+    CEM:
+        horizon: 15                # how long of the horizon to predict
+        popsize: 1000               # how many random samples for mpc
+        particle: 1                # number of particles to enlarge
+        gamma: 1                   # reward discount coefficient
+        #action_low: [-1]           # lower bound of the solution space
+        #action_high: [1]           # upper bound of the solution space
+        #action_dim: 1
+        max_iters: 5
+        num_elites: 20
+        epsilon: 0.001
+        alpha: 0.1
+        init_mean: 0
+        init_var: 1
+
+
+NN_config:
+    model_config:
+        load_model: False        # If set true, you must specify the model path, otherwise train a new model
+        model_path: ".storage/example.ckpt" # the path to load the model
+        #state_dim: 5             # environment states
+        #action_dim: 1            # how many controls we need
+        hidden_sizes: [256, 256, 256]         # hidden layer sizes
+    
+    training_config:
+        n_epochs: 600            # how many epoches to train the dynamic model
+        learning_rate: 0.0005     # learning rate
+        batch_size: 512
+        save_model_flag: False
+        save_model_path: ".storage/exp_1.ckpt" # the path to save the model
+        validation_flag: True
+        validation_freq: 50      # the frequency of validation
+        validation_ratio: 0.2    # ratio of validation set
+
+reward_config:
+    model_config:
+        load_model: False        # If set true, you must specify the model path, otherwise train a new model
+        model_path: "../storage/reward.ckpt" # the path to load the model
+        hidden_sizes: [256, 256, 256]         # hidden layer sizes
+    
+    training_config:
+        n_epochs: 600            # how many epoches to train the dynamic model
+        learning_rate: 0.0005     # learning rate
+        batch_size: 512
+        save_model_flag: True
+        save_model_path: "../storage/reward.ckpt" # the path to save the model
+        validation_flag: True
+        validation_freq: 50      # the frequency of validation
+        validation_ratio: 0.2    # ratio of validation set
