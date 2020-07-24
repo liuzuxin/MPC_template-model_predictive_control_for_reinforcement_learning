@@ -19,7 +19,7 @@ The training and testing scrips are stored in the ```./scripts ``` folder.
 For the Cartpole swingup environment, simple go to the script folder and run
 
 ```angularjs
-python train.py
+cd script && python train.py
 ```
 The script will load the configurations in the ```./config/config.yml``` file and begin to train.
 
